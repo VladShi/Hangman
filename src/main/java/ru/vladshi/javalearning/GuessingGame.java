@@ -1,44 +1,38 @@
 package ru.vladshi.javalearning;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 public class GuessingGame {
 
-    public static void start(Scanner scanner, int numberOfWords) {
-        char[] word = Word.getRandom(numberOfWords);
+    public static void start(Scanner scanner) {
+        Word word = new Word();
         int errorCount = 0;
         int guessCount = 0;
         Set<Character> checkedLettersList = new HashSet<>();
-        char[] currentWord = new char[word.length];
-        Arrays.fill(currentWord, '_');
 
-        while (errorCount < 6 && guessCount < word.length) {
+        while (errorCount < 6 && !word.isGuessed) {
             HangmanPicture.print(errorCount);
-            printWord(currentWord);
+            word.printMasked();
             printCheckedLetters(checkedLettersList);
             char letter = getValidLetterFromInput(scanner);
             if (checkedLettersList.contains(letter)) {
                 System.out.println("Вы уже проверяли эту букву! Будьте внимательней!");
                 continue;
             }
-            boolean isWordContainLetter = false;
-            for (int i = 0; i < word.length; i++) {
-                if (letter == word[i] && guessCount < word.length) {
-                    currentWord[i] = letter;
-                    guessCount++;
-                    isWordContainLetter = true;
-                }
+            int numberOfLetterOccurrences = word.unmaskingAndGetNumberOfOccurrences(letter);
+            if (numberOfLetterOccurrences > 0) {
+                guessCount += numberOfLetterOccurrences;
+                word.isGuessed = (guessCount == word.length);
             }
-            if (!isWordContainLetter) {
+            else {
                 errorCount++;
             }
             checkedLettersList.add(letter);
         }
 
-        if (guessCount == word.length) {
+        if (word.isGuessed) {
             AsciiArt.WIN.print();
             System.out.print("Вы разгадали слово: ");
         } else {
@@ -46,8 +40,8 @@ public class GuessingGame {
             AsciiArt.LOSE.print();
             System.out.print("Вы не смогли разгадать слово: ");
         }
-        printWord(word, false);
-        System.out.println("\n");
+        word.print();
+        System.out.println();
     }
 
     private static char getValidLetterFromInput(Scanner scanner) {
@@ -64,24 +58,6 @@ public class GuessingGame {
                 return letter;
             System.out.println("Введено неверное значение(используйте только буквы русского алфавита)\n");
         }
-    }
-
-    private static void printWord(char[] word) {
-        for (char c : word) {
-            System.out.print(c + " ");
-        }
-        System.out.println();
-    }
-
-    private static void printWord(char[] word, boolean makeSeparated) {
-        if (makeSeparated) {
-            printWord(word);
-        } else {
-            for (char c : word) {
-                System.out.print(c);
-            }
-        }
-        System.out.println();
     }
 
     private static void printCheckedLetters(Set<Character> checkedLetters) {

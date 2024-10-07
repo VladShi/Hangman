@@ -5,10 +5,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         AsciiArt.LOGO.print();
-        int userChoice = 0;
-        int numberOfWords = Word.count();
-        System.out.println("Количество слов для игры = " + numberOfWords);
+        System.out.println("Количество слов для игры = " + Word.numberOfWords);
         Scanner scanner = new Scanner(System.in);
+        int userChoice = 0;
         while (userChoice != 2) {
             System.out.print("""
                     1. Начать новую игру
@@ -24,7 +23,7 @@ public class Main {
                 continue;
             }
             switch (userChoice) {
-                case 1: GuessingGame.start(scanner, numberOfWords); break;
+                case 1: GuessingGame.start(scanner); break;
                 case 2: System.out.println("Игра завершена. До свидания!"); break;
                 default: System.out.println("Введено неверное значение\n");
             }

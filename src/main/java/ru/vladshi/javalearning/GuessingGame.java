@@ -9,10 +9,11 @@ public class GuessingGame {
     public static void start(Scanner scanner) {
         Word word = new Word();
         int errorCount = 0;
+        int maxErrorsAllowed = HangmanPicture.numberOfPictures - 1;
         int guessCount = 0;
         Set<Character> checkedLettersList = new HashSet<>();
 
-        while (errorCount < 6 && !word.isGuessed) {
+        while (errorCount < maxErrorsAllowed && !word.isGuessed) {
             HangmanPicture.print(errorCount);
             word.printMasked();
             printCheckedLetters(checkedLettersList);

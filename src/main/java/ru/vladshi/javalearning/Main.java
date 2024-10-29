@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         AsciiArt.LOGO.print();
-        System.out.println("Количество слов для игры = " + Word.numberOfWords);
+        System.out.println("Количество слов для игры = " + WordsManager.numberOfWords);
         Scanner scanner = new Scanner(System.in);
         int userChoice = 0;
         while (userChoice != 2) {

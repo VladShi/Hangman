@@ -55,7 +55,7 @@ public class HangmanPicture {
 
     public static final int numberOfPictures = pictures.length;
 
-    public static void print(int number) {
-        System.out.println(pictures[number]);
+    public static String get(int number) {
+        return pictures[number];
     }
 }

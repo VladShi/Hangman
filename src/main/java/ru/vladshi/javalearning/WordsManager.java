@@ -17,8 +17,8 @@ public class WordsManager {
 
     static {
         try {
-            pathToFileWithWords = Paths.get(
-                    (Objects.requireNonNull(Word.class.getResource("/slova.txt"))).toURI()
+            pathToFileWithWords = Paths.get((Objects.requireNonNull(
+                            WordsManager.class.getResource(HangmanGame.getNameOfFileWithWords()))).toURI()
             );
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -32,7 +32,7 @@ public class WordsManager {
     private static int getNumberOfWords() {
         int wordsQuantity = 0;
         try (BufferedReader br = Files.newBufferedReader(pathToFileWithWords, StandardCharsets.UTF_8)) {
-            while (br.readLine() != null && !br.readLine().isBlank()) {
+            while (br.readLine() != null) {
                 wordsQuantity++;
             }
             if (wordsQuantity == 0) {

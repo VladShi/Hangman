@@ -6,17 +6,24 @@ import java.util.Set;
 
 public class GuessingGame {
 
-    public static void start(Scanner scanner) {
-        Word word = new Word(WordsManager.getRandomWord());
-        int errorCount = 0;
-        int maxErrorsAllowed = HangmanPicture.numberOfPictures - 1;
-        int guessCount = 0;
-        Set<Character> checkedLettersList = new HashSet<>();
+    private final int MAX_ERRORS_ALLOWED = HangmanPicture.numberOfPictures - 1;
+    private int errorCount;
+    private int guessCount;
+    private final Set<Character> checkedLettersList;
+    private final Word word;
 
-        while (errorCount < maxErrorsAllowed && !word.isGuessed) {
-            System.out.println(HangmanPicture.get(errorCount));
-            printMaskedWord(word);
-            printCheckedLetters(checkedLettersList);
+    public GuessingGame() {
+        this.word = new Word(WordsManager.getRandomWord());
+        this.checkedLettersList = new HashSet<>();
+        this.guessCount = 0;
+        this.errorCount = 0;
+    }
+    
+    public void start(Scanner scanner) {
+        while (!(word.isGuessed || isManHanged())) {
+            printHangman();
+            printMaskedWord();
+            printCheckedLetters();
             char letter = getValidLetterFromInput(scanner);
             if (checkedLettersList.contains(letter)) {
                 System.out.println("Вы уже проверяли эту букву! Будьте внимательней!");
@@ -37,15 +44,19 @@ public class GuessingGame {
             AsciiArt.WIN.print();
             System.out.print("Вы разгадали слово: ");
         } else {
-            System.out.println(HangmanPicture.get(errorCount));
+            printHangman();
             AsciiArt.LOSE.print();
             System.out.print("Вы не смогли разгадать слово: ");
         }
-        printWord(word);
+        printWord();
         System.out.println();
     }
 
-    private static char getValidLetterFromInput(Scanner scanner) {
+    private boolean isManHanged() {
+        return errorCount >= MAX_ERRORS_ALLOWED;
+    }
+
+    private char getValidLetterFromInput(Scanner scanner) {
         String input;
         while (true) {
             System.out.print("Введите букву и нажмите Enter: ");
@@ -61,25 +72,29 @@ public class GuessingGame {
         }
     }
 
-    private static void printCheckedLetters(Set<Character> checkedLetters) {
+    private void printCheckedLetters() {
         System.out.print("[ ");
-        for (char c : checkedLetters) {
+        for (char c : checkedLettersList) {
             System.out.print(c + " ");
         }
         System.out.println("] - проверенные буквы");
     }
 
-    private static void printWord(Word word) {
+    private void printWord() {
         for (char c : word.getText()) {
             System.out.print(c);
         }
         System.out.println();
     }
 
-    private static void printMaskedWord(Word word) {
+    private void printMaskedWord() {
         for (char c : word.getMask()) {
             System.out.print(c + " ");
         }
         System.out.println();
+    }
+
+    private void printHangman() {
+        System.out.println(HangmanPicture.get(errorCount));
     }
 }

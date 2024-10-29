@@ -19,7 +19,7 @@ public class HangmanGame {
             System.out.print("Введите цифру пункта меню и нажмите Enter:");
             userChoice = scanner.nextLine();
             switch (userChoice) {
-                case PLAY: GuessingGame.start(scanner); break;
+                case PLAY: new GuessingGame().start(scanner); break;
                 case QUIT: System.out.println("Игра завершена. До свидания!"); break;
                 default: System.out.println("Введено неверное значение\n");
             }
